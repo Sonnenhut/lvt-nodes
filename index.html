@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F95B;</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        // should use browsers ,. notation for thousands, decimals
+        const numberFormat = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2});
+        const fmt = (num) => numberFormat.format(num);
+        let lvtStats = await fetch("dist/export.json")
+            .then(response => response.json());
+        let lvtlocked = lvtStats.data;
+
+        async function renderTable(off, limit) {
+            let tablebody = document.getElementById("data-insert");
+            let allRows = [];
+            for (const [wallet, obj] of Object.entries(lvtlocked)) {
+                let row = `<tr>
+                                <td><a href="https://snowtrace.io/address/${wallet}">${wallet}</a></td>
+                                <td>${fmt(obj.nodeCnt)}</td>
+                                <td>${fmt(obj.unclaimed)}</td>
+                                <td>${fmt(obj.locked)}</td>
+                            </tr>`;
+                allRows.push(row)
+            }
+
+            let renderRows = allRows.slice(off, limit);
+            tablebody.innerHTML += renderRows.join('');
+
+            const btn = document.getElementById("load-full-table");
+            btn.addEventListener("click", () => { tablebody.innerHTML += allRows.join('');})
+        }
+
+        function renderStats() {
+            document.getElementById("n-export-time").innerHTML = new Date(lvtStats.exportTime).toLocaleString();
+            document.getElementById("n-total-node-owners").innerHTML = fmt(Object.keys(lvtlocked).length);
+            document.getElementById("n-total-locked").innerHTML = fmt(Object.values(lvtlocked).map(obj => obj.locked).reduce((acc, v) => acc+v, 0));
+            document.getElementById("n-total-nodes").innerHTML = fmt(Object.values(lvtlocked).map(obj => obj.nodeCnt).reduce((acc, v) => acc+v, 0));
+
+            const CHART_COLORS = {
+                red: 'rgb(255, 99, 132)',
+                orange: 'rgb(255, 159, 64)',
+                yellow: 'rgb(255, 205, 86)',
+                green: 'rgb(75, 192, 192)',
+                blue: 'rgb(54, 162, 235)',
+                purple: 'rgb(153, 102, 255)',
+                grey: 'rgb(201, 203, 207)'
+            };
+            console.log(Object.values(CHART_COLORS))
+            const allLocked = Object.values(lvtlocked).map(obj => obj.locked);
+            const dTo10k = allLocked.filter(k => k <= 10_000).reduce((acc, num) => acc + num, 0);
+            const d10kTo100k = allLocked.filter(k => k > 10_000 && k <= 100_000).reduce((acc, num) => acc + num, 0);
+            const d100kTo1Mil = allLocked.filter(k => k > 100_000 && k <= 1_000_000).reduce((acc, num) => acc + num, 0);
+            const d1MilTo10Mil = allLocked.filter(k => k > 1_000_000 && k <= 10_000_000).reduce((acc, num) => acc + num, 0);
+            const dOver10Mil = allLocked.filter(k => k > 10_000_000).reduce((acc, num) => acc + num, 0);
+            let data = {
+                datasets: [{
+                    data: [dTo10k, d10kTo100k, d100kTo1Mil, d1MilTo10Mil, dOver10Mil],
+                    backgroundColor: Object.values(CHART_COLORS),
+                }],
+                labels: ["< 10k LVT", "10k - 100k LVT", "100k - 1M LVT", "1M - 10M 1M LVT", ">= 10M LVT"],
+            };
+            new Chart(document.getElementById('lvtChart'), {type: 'pie', data, options: {
+                    animations: false}});
+        }
+
+        renderStats();
+        renderTable(0,100);
+    </script>
+    <style>
+        .table th:not(:first-child),
+        .table td:not(:first-child){
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom w-100">&#x1F95B; LVT stats</h2>
+    <p>This page shows allocation of nodes by wallet addresses. LVT that is not allocated as a node will not show up in here. Please note that this data is exported from the smart contract and updated regularly, dont expect live data. Last export time: <b id="n-export-time"></b></p>
+    <div class="row g-4 py-3 row-cols-1 row-cols-lg-3">
+        <div>
+            <h3 id="n-total-node-owners">..</h3>
+            <p>Total Node owners</p>
+        </div>
+        <div>
+            <h3 id="n-total-locked">..</h3>
+            <p>Total LVT locked away as nodes</p>
+        </div>
+        <div>
+            <h3 id="n-total-nodes">..</h3>
+            <p>Total nodes</p>
+        </div>
+    </div>
+
+    <h2 class="pb-2 border-bottom w-100">&#x1F95B; Distribution of whales and small fish</h2>
+    <div class="w-50">
+        <canvas id="lvtChart"></canvas>
+        <p>Distribution of locked LVT grouped by their holders size.</p>
+    </div>
+
+    <br>
+    <h2 class="pb-2 border-bottom w-100">&#x1F95B; List of all node owners</h2>
+    <div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Wallet</th>
+            <th scope="col">Nodes</th>
+            <th scope="col">Unclaimed</th>
+            <th scope="col">LVT locked</th>
+        </tr>
+        </thead>
+        <tbody id="data-insert">
+            <!-- inserted onload -->
+        </tbody>
+    </table>
+    <p>Only first 100 shown</p>
+    <button id="load-full-table" type="button" class="btn btn-secondary btn-lg">Load all</button>
+    </div>
+</div>
+
+</body>
+</html>
