@@ -3,6 +3,9 @@ name: pages-export-script
 on:
   schedule:
     - cron: "0 0 * * *"
+  push:
+    branches:
+      - master
 
 jobs:
   publish:
@@ -13,6 +16,7 @@ jobs:
        with:
          node-version: '14'
          cache: 'npm'
+     - run: npm i
      - run: npm run dist
      - name: GitHub Pages
        if: success()
