@@ -73,7 +73,7 @@ const web3Options = {
             if ((reqPromises.length / maxBatchSize) % maxParallelRequests === 0) {
                 console.log("... throttling")
                 await Promise.all(reqPromises)
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
         }
         return await Promise.all(reqPromises);
