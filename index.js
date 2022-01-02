@@ -60,7 +60,7 @@ const web3Options = {
         });
 
         const maxBatchSize = 40;
-        const maxParallelRequests = 10;
+        const maxParallelRequests = 5;
         let reqPromises = [];
         // this will fire all batched requests. (could be improved to limit sending X in parallel)
         for (let idx = 0; idx < workload.length; idx += maxBatchSize) {
