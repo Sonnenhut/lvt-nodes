@@ -4,6 +4,12 @@ Available at: https://sonnenhut.github.io/lvt-nodes/
 
 Shows some stats from data exported from the smart contract.
 
+LVT project: https://www.louverture.finance/
+
+Smart contract: https://snowtrace.io/address/0xff579d6259dedcc80488c9b89d2820bcb5609160
+
+NodeRewardManager smart contract: https://snowtrace.io/address/0x3cf1dff7cce2b7291456bc2089b4bcb2ab5f311a
+
 
 ### Thoughts on the process 
 
