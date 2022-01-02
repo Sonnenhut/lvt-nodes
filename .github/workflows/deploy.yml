@@ -26,7 +26,7 @@ jobs:
          keep_history: true
          allow_empty_commit: false
          target_branch: gh-pages
-         build_dir: script
+         build_dir: dist
          dry_run: false
          verbose: true
        env:
