@@ -1,0 +1,6 @@
+.idea
+*.iml
+*.sol
+decompiled
+node_modules
+script/export.json
