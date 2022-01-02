@@ -3,4 +3,4 @@
 *.sol
 decompiled
 node_modules
-script/export.json
+export.json

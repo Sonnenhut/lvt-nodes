@@ -10,7 +10,7 @@ const web3Options = {
 (async () => {
     let httpProvider = new Web3.providers.HttpProvider("https://api.avax.network/ext/bc/C/rpc", web3Options);
     const web3 = new Web3(httpProvider);
-    const outputFile = "lvtnoders.json";
+    const outputFile = "export.json";
 
     const lvtAddress = "0xff579d6259dEDcc80488c9b89d2820bCb5609160";
     const lvtNodeRewardAddrSlot = 13; // variable nodeRewardManager in LVT
