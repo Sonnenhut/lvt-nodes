@@ -67,7 +67,6 @@
                 purple: 'rgb(153, 102, 255)',
                 grey: 'rgb(201, 203, 207)'
             };
-            console.log(Object.values(CHART_COLORS))
             const allLocked = Object.values(lvtlocked).map(obj => obj.locked);
             const dTo10k = allLocked.filter(k => k <= 10_000).reduce((acc, num) => acc + num, 0);
             const d10kTo100k = allLocked.filter(k => k > 10_000 && k <= 100_000).reduce((acc, num) => acc + num, 0);
