@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dist": "node index.js && cp index.html ./dist && cp export.json ./dist"
+    "dist": "node index.js && mkdir -p dist && cp index.html ./dist/ && cp export.json ./dist/"
   },
   "author": "",
   "license": "ISC",
