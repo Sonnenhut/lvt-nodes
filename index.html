@@ -32,7 +32,7 @@
                 let row = `<tr>
                                 <td><a href="https://snowtrace.io/address/${wallet}">${wallet}</a></td>
                                 <td>${fmt(obj.nodeCnt)}</td>
-                                <td></td>
+                                <td>${renderLVTWithUSD(obj.unclaimed)}</td>
                                 <td>${renderLVTWithUSD(obj.lvtPerDay)}</td>
                                 <td>${renderLVTWithUSD(obj.locked)}</td>
                             </tr>`;
