@@ -28,8 +28,9 @@
         async function renderTable(off, limit) {
             let tablebody = document.getElementById("data-insert");
             let allRows = [];
-            for (const [wallet, obj] of Object.entries(lvtlocked)) {
+            for (const [idx, [wallet, obj]] of Object.entries(lvtlocked).entries()) {
                 let row = `<tr>
+                                <th scope="row">${idx + 1}</th>
                                 <td><a href="https://snowtrace.io/address/${wallet}">${wallet}</a></td>
                                 <td>${fmt(obj.nodeCnt)}</td>
                                 <td>${renderLVTWithUSD(obj.unclaimed)}</td>
@@ -91,8 +92,8 @@
         renderTable(0, 100);
     </script>
     <style>
-        .table th:not(:first-child),
-        .table td:not(:first-child) {
+        thead th:not(:first-child):not(:nth-child(2)),
+        tbody td:not(:nth-child(2)) {
             text-align: right;
         }
         .dollar {
@@ -151,6 +152,7 @@
         <table class="table table-striped">
             <thead>
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Wallet</th>
                 <th scope="col">Nodes</th>
                 <th scope="col">Unclaimed</th>
