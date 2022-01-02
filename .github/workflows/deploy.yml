@@ -1,8 +1,28 @@
-- name: GitHub Pages
-   uses: 'crazy-max/ghaction-github-pages@v2.5.0'
-  with:
-    keep_history: true
-    allow_empty_commit: false
-    build_dir: script
-    dry_run: false
-    verbose: true
+name: website
+
+on: push
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Gen dummy page
+        run: |
+          echo "hi there"
+      -
+        name: GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2.5.0
+        with:
+          keep_history: true
+          allow_empty_commit: false
+          target_branch: gh-pages
+          build_dir: script
+          dry_run: false
+          verbose: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
