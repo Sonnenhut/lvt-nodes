@@ -1,0 +1,8 @@
+- name: GitHub Pages
+   uses: 'crazy-max/ghaction-github-pages@v2.5.0'
+  with:
+    keep_history: true
+    allow_empty_commit: false
+    build_dir: script
+    dry_run: false
+    verbose: true
