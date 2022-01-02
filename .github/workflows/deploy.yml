@@ -1,4 +1,4 @@
-name: website
+name: pages-export-script
 
 on:
   schedule:
