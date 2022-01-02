@@ -60,7 +60,7 @@ const web3Options = {
         });
 
         const maxBatchSize = 40;
-        const maxParallelRequests = 5;
+        const maxParallelRequests = 50;
         let reqPromises = [];
         // this will fire all batched requests. (could be improved to limit sending X in parallel)
         for (let idx = 0; idx < workload.length; idx += maxBatchSize) {
@@ -73,7 +73,7 @@ const web3Options = {
             if ((reqPromises.length / maxBatchSize) % maxParallelRequests === 0) {
                 console.log("... throttling")
                 await Promise.all(reqPromises)
-                new Promise(resolve => setTimeout(resolve, 10000));
+                await new Promise(resolve => setTimeout(resolve, 3000));
             }
         }
         return await Promise.all(reqPromises);
