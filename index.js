@@ -1,5 +1,6 @@
-const Web3 = require('web3');
-const fs = require('fs');
+import fetch from "node-fetch";
+import Web3 from 'web3';
+import fs from 'fs';
 
 const web3Options = {
     keepAlive: true,
@@ -8,7 +9,7 @@ const web3Options = {
 };
 
 (async () => {
-    let httpProvider = new Web3.providers.HttpProvider("https://api.avax.network/ext/bc/C/rpc", web3Options);
+    const httpProvider = new Web3.providers.HttpProvider("https://api.avax.network/ext/bc/C/rpc", web3Options);
     const web3 = new Web3(httpProvider);
     const outputFile = "export.json";
 
@@ -17,6 +18,10 @@ const web3Options = {
     const nodeOwnersSlot = 0; // variable nodeOwners#keys (dynamic array)
     const nodesOfUserSlot = 4; // variable _nodesOfUser
     const bnOne = web3.utils.toBN(1000000000).mul(web3.utils.toBN(1000000000))
+
+    const lvtUsd = await fetch(`https://api.coingecko.com/api/v3/simple/token_price/avalanche?contract_addresses=${lvtAddress}&vs_currencies=USD`)
+        .then(d => d.json())
+        .then(json => Object.values(json)[0].usd);
 
     let nodeRewardManagementAddress = await web3.eth.getStorageAt(lvtAddress, lvtNodeRewardAddrSlot).then(n => asAddress(n));
     console.log("nodeRewardManager addr: ", nodeRewardManagementAddress)
@@ -160,6 +165,7 @@ const web3Options = {
                 const daysSinceLastCompound = (nowSecs - nlastCompoundTimeEpoch.toNumber()) / secsPerDay;
                 const unclaimed = Math.trunc(lvtPerDay.toNumber() * daysSinceLastCompound);
                 currNodes.unclaimed = (currNodes.unclaimed || 0) + unclaimed;
+                currNodes.lvtPerDay = (currNodes.lvtPerDay || 0) + lvtPerDay.toNumber();
 
                 csr += 3;
             })
@@ -190,6 +196,7 @@ const web3Options = {
 
     let res = {
         exportTime: Date.now(),
+        lvtUsd,
         data: walletWithData
     }
     fs.writeFile(outputFile, JSON.stringify(res), err => {

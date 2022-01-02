@@ -18,7 +18,7 @@ jobs:
          node-version: '16.13.1'
          cache: 'npm'
      - run: npm i
-     - run: npm run dist
+     - run: npm run export
      - name: GitHub Pages
        if: success()
        uses: crazy-max/ghaction-github-pages@v2.5.0
