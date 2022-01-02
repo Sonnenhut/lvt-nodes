@@ -14,7 +14,7 @@
         // should use browsers ,. notation for thousands, decimals
         const numberFormat = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2});
         const fmt = (num) => numberFormat.format(num);
-        let lvtStats = await fetch("dist/export.json")
+        let lvtStats = await fetch("export.json")
             .then(response => response.json());
         let lvtlocked = lvtStats.data;
 
