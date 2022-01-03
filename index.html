@@ -55,7 +55,7 @@
             document.getElementById("n-total-node-owners").innerHTML = fmt(Object.keys(lvtlocked).length);
             document.getElementById("n-total-unclaimed").innerHTML = renderLVTWithUSD(Object.values(lvtlocked).map(obj => obj.unclaimed).reduce((acc, v) => acc + v, 0));
             document.getElementById("n-total-lvt-per-day").innerHTML = renderLVTWithUSD(Object.values(lvtlocked).map(obj => obj.lvtPerDay).reduce((acc, v) => acc + v, 0));
-            document.getElementById("n-total-locked").innerHTML = renderLVTWithUSD(Object.values(lvtlocked).map(obj => obj.locked).reduce((acc, v) => acc + v, 0));
+            document.getElementById("n-total-node-sizes").innerHTML = renderLVTWithUSD(Object.values(lvtlocked).map(obj => obj.locked).reduce((acc, v) => acc + v, 0));
             document.getElementById("n-total-nodes").innerHTML = fmt(Object.values(lvtlocked).map(obj => obj.nodeCnt).reduce((acc, v) => acc + v, 0));
             document.getElementById("n-price").innerHTML = lvtStats.lvtUsd;
 
@@ -113,8 +113,8 @@
         data. The rewards are not calculated by the smart contract, raw data is used to estimate. Last export time: <i id="n-export-time"></i></p>
     <div class="row g-4 py-3 row-cols-1 row-cols-lg-3 stats">
         <div>
-            <h3 id="n-total-locked">..</h3>
-            <p>Total LVT locked away as nodes</p>
+            <h3 id="n-total-node-sizes">..</h3>
+            <p>Sum of all node sizes including compounds</p>
         </div>
         <div>
             <h3 id="n-total-unclaimed">..</h3>
