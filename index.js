@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import Web3 from 'web3';
 import fs from 'fs';
+import assert from 'assert';
 
 const web3Options = {
     keepAlive: true,
@@ -80,7 +81,7 @@ const web3Options = {
     }
 
     async function loadDynamicArray(contractAddress, storageSlot) {
-        let arrSize = await web3.eth.getStorageAt(contractAddress, storageSlot).then(hex => web3.utils.hexToNumber(hex));
+        const arrSize = await web3.eth.getStorageAt(contractAddress, storageSlot).then(hex => web3.utils.hexToNumber(hex));
         let hexIdx = web3.utils.soliditySha3(storageSlot);
 
         let slotAddresses = [...Array(arrSize).keys()].map(off => addStorageHex(hexIdx, off));
@@ -178,12 +179,15 @@ const web3Options = {
 
     let wallets = (await loadDynamicArray(nodeRewardManagementAddress, nodeOwnersSlot)).map(hex => asAddress(hex));
     console.log("fetched wallets: ", wallets.length)
+    assert(wallets.length > 0);
 
     let values = await loadLVTAllNodeValueOf(wallets);
-    console.log("fetched all nodeValueOf: ", wallets.length);
+    console.log("fetched all nodeValueOf: ", values.length);
+    assert(values.length > 0);
 
     let nodesOfUser = await loadTotalRewardAvail(wallets) /* returns {walletId: {nodeCnt, reward}}*/;
     console.log("fetched nodesOfUser: ", Object.keys(nodesOfUser).length)
+    assert(Object.keys(nodesOfUser).length > 0);
 
     let walletWithData = {};
     [...Array(wallets.length).keys()]
