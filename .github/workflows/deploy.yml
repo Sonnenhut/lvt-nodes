@@ -1,8 +1,8 @@
 name: pages-export-script
 
-on:
-  schedule:
-    - cron: "0 0 30 2 *"
+#on:
+#  schedule:
+#    - cron: "0 0 30 2 *"
 #  push:
 #    branches:
 #      - master
