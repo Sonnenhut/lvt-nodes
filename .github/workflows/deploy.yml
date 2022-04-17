@@ -3,10 +3,10 @@ name: pages-export-script
 on:
   schedule:
     - cron: "0 0 30 2 *"
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+#  push:
+#    branches:
+#      - master
+#  workflow_dispatch:
 
 jobs:
   pages-export-script:
